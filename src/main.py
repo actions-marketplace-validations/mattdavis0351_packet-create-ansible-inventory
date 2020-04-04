@@ -55,6 +55,7 @@ f = open("hosts", "w+")
 # Desired group names is a part of the host name
 # group name: master  host name: k8s-master
 # group name: bread  host name: bread-crumb-host
+
 dev = manager.list_devices(project_id)
 for d in dev:
     for b in project_batches:
@@ -62,13 +63,13 @@ for d in dev:
             if "/devices/"+d.id == ref['href']:
                 serv = manager.get_device(d.id)
                 ip_addrs = serv.ip_addresses
-                for addr in ip_addrs:
-                    if addr["address_family"] == 4:
-                        for n in group_names:
-                            if n in d.hostname.lower() and addr["public"] == True:
-                                groups[n].append(addr['address'])
+                for add in ip_addrs:
+                    if add["address_family"] == 4:
+                        for group in group_names:
+                            if group in d.hostname.lower() and add["public"] == True:
+                                groups[group].append(add['address'])
                             else:
-                                groups["misc"].append(addr['address'])
+                                groups["misc"].append(add['address'])
 
 # Write the created groups from the object into a file
 print(groups)
