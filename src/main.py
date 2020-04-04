@@ -71,6 +71,7 @@ for d in dev:
                                 groups["misc"].append(addr['address'])
 
 # Write the created groups from the object into a file
+print(groups)
 for g in groups:
     f.write("[%s]\r" % g)
     for members in groups[g]:
