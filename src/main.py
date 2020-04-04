@@ -1,5 +1,7 @@
 import packet
 import os
+import time
+
 
 # Collect input variables from workflow
 API_key = os.getenv("INPUT_API_KEY") or "No key supplied"
@@ -14,7 +16,8 @@ if API_key == "No key supplied":
 if project_name == "default":
     raise ValueError("Must supply an existing project ID for this device")
 
-
+# Delay just a little to ensure resources are ready on packet.com
+time.sleep(10)
 # Create Packet.com API client
 manager = packet.Manager(auth_token=API_key)
 
