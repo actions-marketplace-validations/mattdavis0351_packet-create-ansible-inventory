@@ -11,7 +11,8 @@ inputs:
     required: true
   group_names:
     description: "Comma separated list of desired group names within inventory file"
-    required: false
+    required: true
+    default: "misc"
 
 runs:
   using: "docker"

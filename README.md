@@ -1,12 +1,12 @@
-# GitHub Actions for creating a batch of devices within projects on Packet.com
+# GitHub Actions for generating an Ansible inventory file for a batch of devices within projects on Packet.com
 
 ## Automate your infrastructure
 
-This GitHub Action will create a new device batch in an existing project on [packet.com](https://packet.com). Devices are compute resources available within your organization projects.
+This GitHub Action will create a new inventory file for a device batch in an existing project on [packet.com](https://packet.com). Devices are compute resources available within your organization projects.
 
 # Creating devices
 
-With this action you can automate your workflow to by provisioning multiple devices inside of projects using the [packet.com api](https://api.packet.net).
+With this action you can automate your workflow to by building an Ansible inventory file to configure the multiple devices inside of projects using the [packet.com api](https://api.packet.net).
 
 To use this action you will first need an [authentication token](https://www.packet.com/developers/api/authentication/) which can be generated through the [Packet Portal](https://app.packet.net/login?redirect=%2F%3F__woopraid%3DjUPDKi0tqtym).
 
@@ -30,36 +30,27 @@ jobs:
     runs-on: ubuntu-latest
     name: Creating new device in existing packet project
     steps:
-      - uses: mattdavis0351/packet-create-device-batch@v1
+      - name: Create Ansible Inventory File
+        uses: mattdavis0351/packet-create-ansible-inventory@v1
+        if: success()
         with:
           API_key: ${{ secrets.PACKET_API_KEY }}
-          project_name: my-project
-          host_names: "Host-1, Host-2, Host-3"
-          plan: "t3.small.x86"
-          facility: "sjc1"
-          operating_system: "ubuntu_19_04"
-          quantity: 3
-          spot_instance: true
-          spot_price_max: .50
-          user_ssh_keys: ${{ secrets.PACKET_PUBLIC_KEY }}
+          project_name: My-project-name
+          group_names: "webservers, databases"
 ```
 
 ## Available Inputs
 
-| Input              | Description                                                                                                                       | Default Value       | Required           |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ------------------ |
-| `API_key`          | Packet.com API authorization token                                                                                                | No key supplied     | :white_check_mark: |
-| `project_name`     | Desired name for new project                                                                                                      | default             | :white_check_mark: |
-| `host_names`       | Desired host names for new device. If specifying more than one device us a comma separated list.                                  | GitHub Actions Host | :white_check_mark: |
-| `plan`             | Desired server type for device                                                                                                    | default             | :white_check_mark: |
-| `facility`         | Geographical location for device                                                                                                  | default             | :white_check_mark: |
-| `operating_system` | Desired operating system for device                                                                                               | default             | :white_check_mark: |
-| `quantity`         | Number of desired devices in the batch. **if you specify more than one host name this number must match the amount of hostnames** | 1                   | :x:                |
-| `spot_instance`    | Create devices as spot instances                                                                                                  | false               | :x:                |
-| `spot_price_max`   | Maximum bid for spot instances                                                                                                    | 1                   | :x:                |
-| `user_ssh_keys`    | SSH keys for any user account you wish to add to device                                                                           |                     | :x:                |
-| `project_ssh_keys` | Project level SSH keys for device                                                                                                 |                     | :x:                |
+| Input          | Description                                                                                           | Default Value       | Required           |
+| -------------- | ----------------------------------------------------------------------------------------------------- | ------------------- | ------------------ |
+| `API_key`      | Packet.com API authorization token                                                                    | No key supplied     | :white_check_mark: |
+| `project_name` | Existing project name you wish to add to inventory                                                    | default             | :white_check_mark: |
+| `group_names`  | Desired group names for inventory file. If specifying more than one device us a comma separated list. | GitHub Actions Host | :white_check_mark: |
 
 ## Outputs from action
 
 This action does not supply any outputs
+
+## Notes
+
+This action depends on the availability of your packet.com resources. If they are currently being created and this actions runs before their status becomes active you may end up with an empty inventory file. This will be addressed in future releases of this action.

@@ -3,7 +3,7 @@ import os
 
 # Collect input variables from workflow
 API_key = os.getenv("INPUT_API_KEY") or "No key supplied"
-group_names_list = os.getenv("INPUT_GROUP_NAMES") or "misc"
+group_names_list = os.getenv("INPUT_GROUP_NAMES")
 project_name = os.getenv("INPUT_PROJECT_NAME") or "default"
 
 # Check if required inputs have been received
@@ -68,8 +68,7 @@ for d in dev:
                         for group in group_names:
                             if group in d.hostname.lower() and add["public"] == True:
                                 groups[group].append(add['address'])
-                            # else:
-                            #     groups["misc"].append(add['address'])
+
 
 # Write the created groups from the object into a file
 print(groups)
