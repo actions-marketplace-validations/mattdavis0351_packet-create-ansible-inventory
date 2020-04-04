@@ -68,8 +68,8 @@ for d in dev:
                         for group in group_names:
                             if group in d.hostname.lower() and add["public"] == True:
                                 groups[group].append(add['address'])
-                            else:
-                                groups["misc"].append(add['address'])
+                            # else:
+                            #     groups["misc"].append(add['address'])
 
 # Write the created groups from the object into a file
 print(groups)
