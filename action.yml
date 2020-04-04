@@ -1,0 +1,22 @@
+name: "Create Packet Ansible Inventory File"
+description: "GitHub Action to dynamically create an Ansible inventory file from a Packet.com project"
+author: mattdavis0351
+
+inputs:
+  API_key:
+    description: "Packet.com API authorization token"
+    required: true
+  project_name:
+    description: "Name of project to create inventory for"
+    required: true
+  group_names:
+    description: "Comma separated list of desired group names within inventory file"
+    required: false
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+
+branding:
+  icon: "cloud"
+  color: "gray-dark"
